@@ -60,19 +60,20 @@ footer{color:var(--muted);font-size:12px;text-align:center;margin-top:40px}
 
   <footer data-t="footer"></footer>
 </div>
-<script src="assets/lang.js"></script>
+<script src="assets/lang.js?v=3"></script>
 <script>
 const UI={
   zh:{days:'累计日报（天）',items:'累计条目',range:'覆盖区间',ph:'关键词搜索（如：英伟达、半导体）',hint:'搜索范围覆盖标题、摘要与全部新闻条目；点击卡片打开当日完整日报。',empty:'没有匹配结果，换个关键词试试',footer:'East Asia ICT MSSD AI Brief · 自动归档',sub:d=>'每日简报归档 · 关键词检索 · 数据截至 '+d,n:'条'},
-  en:{days:'Daily briefs',items:'Total items',range:'Coverage',ph:'Search keywords (e.g. NVIDIA, semiconductors)',hint:'Searches titles, summaries and all news items. Click a card to open the full brief.',empty:'No results. Try another keyword.',footer:'East Asia ICT MSSD AI Brief · Auto-archived',sub:d=>'Daily brief archive · Keyword search · Updated '+d,n:'items'},
   ko:{days:'누적 브리프(일)',items:'누적 항목',range:'기간',ph:'키워드 검색 (예: 엔비디아, 반도체)',hint:'제목·요약·항목 전체 검색. 카드 클릭 시 해당일 브리프 열림.',empty:'결과 없음. 다른 키워드로 검색.',footer:'East Asia ICT MSSD AI Brief · 자동 아카이브',sub:d=>'매일 브리프 모음 · 키워드 검색 · '+d+' 기준',n:'건'},
   ja:{days:'累計ブリーフ（日）',items:'累計項目',range:'対象期間',ph:'キーワード検索（例：NVIDIA、半導体）',hint:'タイトル・要約・全ニュース項目を検索。カードをクリックで当日のブリーフを表示。',empty:'該当なし。別のキーワードでお試しください。',footer:'East Asia ICT MSSD AI Brief · 自動アーカイブ',sub:d=>'毎日のブリーフ集 · キーワード検索 · '+d+' 時点',n:'件'}
 };
 let briefs=[],links=[],lang='ko',lastDate='';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const hl=(s,q)=>{s=esc(s);if(!q)return s;return s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>')};
+const TAG={HUAWEI:{zh:'华为',ko:'화웨이',ja:'ファーウェイ'},'运营商':{zh:'运营商',ko:'통신사',ja:'通信キャリア'},'友商':{zh:'友商',ko:'경쟁사',ja:'競合他社'},AI:{zh:'AI',ko:'AI',ja:'AI'},ICT:{zh:'ICT',ko:'ICT',ja:'ICT'}};
+const tagText=t=>{const m=t.match(/^(.+) (\d+)$/);return m&&TAG[m[1]]?TAG[m[1]][lang]+' '+m[2]:t};
 const pick=(v,l)=>v==null?'':typeof v==='string'?v:(v[l]||v.ko||v.zh||'');
-const nItems=b=>{const t=b.title&&typeof b.title==='object';const n=(b.items||[]).length;return t?Math.round(n/(('en' in b.title)?4:3)):n};
+const nItems=b=>{const n=(b.items||[]).length;return b.title&&typeof b.title==='object'?Math.round(n/3):n};
 
 function texts(){
   const u=UI[lang];
@@ -82,18 +83,18 @@ function texts(){
 }
 function render(q=''){
   q=q.trim();const ql=q.toLowerCase();
-  const rows=briefs.filter(b=>!q||[pick(b.title,'zh'),pick(b.title,'ko'),pick(b.title,'ja'),pick(b.title,'en'),pick(b.summary,'zh'),pick(b.summary,'ko'),pick(b.summary,'ja'),pick(b.summary,'en'),...(b.items||[]),...(b.tags||[])].join(' ').toLowerCase().includes(ql));
+  const rows=briefs.filter(b=>!q||[pick(b.title,'zh'),pick(b.title,'ko'),pick(b.title,'ja'),pick(b.summary,'zh'),pick(b.summary,'ko'),pick(b.summary,'ja'),...(b.items||[]),...(b.tags||[])].join(' ').toLowerCase().includes(ql));
   document.getElementById('list').innerHTML=rows.map(b=>{
     const own=(pick(b.title,lang)+' '+pick(b.summary,lang)).toLowerCase().includes(ql);const hit=q&&!own?(b.items||[]).find(i=>i.toLowerCase().includes(ql)):null;
     return `<a class="card" href="${esc(b.url)}?lang=${lang}">
       <div class="date">${esc(b.date)}</div>
       <h2>${hl(pick(b.title,lang),q)}</h2>
       <p>${hl(hit||pick(b.summary,lang),q)}</p>
-      ${b.tags?`<div class="tags">${b.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+      ${b.tags?`<div class="tags">${b.tags.map(t=>`<span>${esc(tagText(t))}</span>`).join('')}</div>`:''}
     </a>`}).join('');
   document.getElementById('empty').style.display=rows.length?'none':'block';
 }
-fetch('data/briefs.json').then(r=>r.json()).then(d=>{
+fetch('data/briefs.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(d=>{
   briefs=(d.briefs||[]).sort((a,b)=>b.date.localeCompare(a.date));
   const dates=briefs.map(b=>b.date).sort();
   document.getElementById('sDays').textContent=briefs.length;

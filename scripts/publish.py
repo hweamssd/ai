@@ -3,8 +3,6 @@
 
 1) 메일 게시:   python3 scripts/publish.py <gmail_message.json>
    → daily/DATE.html, data/days/DATE.json(번역 원본), data/briefs.json 갱신
-2) 영어 반영:   python3 scripts/publish.py --en DATE
-   → data/days/DATE.en.json 검증 후 briefs.json에 영어 제목·요약·항목 병합
 """
 import html, json, re, sys
 from pathlib import Path
@@ -150,12 +148,12 @@ def publish(src):
     page = ('<!doctype html><html lang="ko"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width, initial-scale=1">'
             f'<title>East Asia ICT MSSD AI Brief {yymmdd}</title>'
-            '<link rel="stylesheet" href="../assets/brief.css"></head>'
+            '<link rel="stylesheet" href="../assets/brief.css?v=3"></head>'
             f'<body data-date="{date}" style="margin:0;background-color:#f3f0e9;">'
             '<div class="topbar"><a href="../">← <span data-i18n="back">전체 목록</span></a>'
             '<div id="langbar"></div></div>'
-            '<div id="brief">' + body + '</div><div id="en"></div>'
-            '<script src="../assets/lang.js"></script></body></html>')
+            '<div id="brief">' + body + '</div>'
+            '<script src="../assets/lang.js?v=3"></script></body></html>')
     (ROOT / 'daily').mkdir(exist_ok=True)
     (ROOT / 'daily' / f'{date}.html').write_text(page, encoding='utf-8')
 
@@ -164,45 +162,17 @@ def publish(src):
     (days / f'{date}.json').write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
     jp, data = load_index()
-    old = next((b for b in data['briefs'] if b.get('date') == date), {})
     data['briefs'] = [b for b in data['briefs'] if b.get('date') != date and b.get('title') != '예시 브리프 제목']
     data['links'] = [l for l in data.get('links', []) if '예시' not in l.get('title', '')]
     first = d['changes'][0]['title'] if d['changes'] else {k: v[:40] for k, v in d['summary'].items()}
     entry = {'date': date, 'title': dict(first), 'summary': dict(d['summary']), 'tags': d['tags'],
              'url': f'daily/{date}.html',
              'items': [t for a in d['articles'] for t in (a['title']['zh'], a['title']['ko'], a['title']['ja'])]}
-    # 같은 날짜 재게시 시 기존 영어 번역 유지
-    if isinstance(old.get('title'), dict) and 'en' in old['title']:
-        entry['title']['en'] = old['title']['en']
-        entry['summary']['en'] = old['summary'].get('en', '')
-        entry['items'] += [i for i in old.get('items', []) if i not in entry['items']]
     data['briefs'].append(entry)
     save_index(jp, data)
     print(f'published {date}: {len(d["articles"])} articles, {len(d["changes"])} changes, '
           f'analysis={"analysis" in d}, tags={d["tags"]}')
 
 
-def merge_en(date):
-    days = ROOT / 'data' / 'days'
-    src = json.loads((days / f'{date}.json').read_text(encoding='utf-8'))
-    en = json.loads((days / f'{date}.en.json').read_text(encoding='utf-8'))
-    assert en.get('summary'), 'en.summary 없음'
-    assert len(en.get('articles', [])) == len(src['articles']), \
-        f'기사 수 불일치: en {len(en.get("articles", []))} / 원본 {len(src["articles"])}'
-    for a in en['articles']:
-        assert a.get('title') and a.get('summary'), '기사 title/summary 누락'
-    jp, data = load_index()
-    b = next(b for b in data['briefs'] if b['date'] == date)
-    b['title']['en'] = en['changes'][0]['title'] if en.get('changes') else en['summary'][:60]
-    b['summary']['en'] = en['summary']
-    b['items'] = [i for i in b['items'] if i not in [a['title'] for a in en['articles']]] + \
-                 [a['title'] for a in en['articles']]
-    save_index(jp, data)
-    print(f'merged en {date}: {len(en["articles"])} articles')
-
-
 if __name__ == '__main__':
-    if sys.argv[1] == '--en':
-        merge_en(sys.argv[2])
-    else:
-        publish(sys.argv[1])
+    publish(sys.argv[1])
