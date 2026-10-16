@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Brief 아카이브</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--text:#1a1a1a;--muted:#6b6b6b;--line:#e4e4e0;--accent:#2b59c3}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--text:#ededed;--muted:#9a9a9a;--line:#2e2e2e;--accent:#7aa2ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;line-height:1.6}
+.wrap{max-width:880px;margin:0 auto;padding:40px 16px 60px}
+h1{margin:0 0 4px;font-size:28px}
+.sub{color:var(--muted);margin:0 0 28px;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stat b{display:block;font-size:24px}
+.stat span{color:var(--muted);font-size:13px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.links a{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--text);text-decoration:none}
+.links a:hover{border-color:var(--accent)}
+input{width:100%;padding:14px 16px;font-size:16px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);margin-bottom:6px}
+.hint{color:var(--muted);font-size:13px;margin:0 0 20px}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:12px;color:var(--text);text-decoration:none}
+.card:hover{border-color:var(--accent)}
+.date{color:var(--accent);font-size:13px;font-weight:600}
+.card h2{font-size:18px;margin:4px 0 6px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:12px;background:var(--bg);border-radius:6px;padding:2px 8px;color:var(--muted)}
+mark{background:#ffe48a;color:#000;border-radius:3px}
+.empty{color:var(--muted);text-align:center;padding:40px 0;display:none}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:40px}
+@media (max-width:520px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Daily Brief 아카이브</h1>
+  <p class="sub" id="sub">매일 브리프 모음 · 키워드 검색</p>
+
+  <div class="stats">
+    <div class="stat"><b id="sDays">0</b><span>누적 브리프(일)</span></div>
+    <div class="stat"><b id="sItems">0</b><span>누적 항목</span></div>
+    <div class="stat"><b id="sRange">-</b><span>기간</span></div>
+  </div>
+
+  <div class="links" id="links"></div>
+
+  <input id="q" type="search" placeholder="키워드 검색 (예: 엔비디아, 반도체)">
+  <p class="hint">제목·요약·항목 전체 검색. 카드 클릭 시 해당일 브리프 열림.</p>
+
+  <div id="list"></div>
+  <p class="empty" id="empty">결과 없음. 다른 키워드로 검색.</p>
+
+  <footer>Daily Brief 아카이브 · 자동 생성</footer>
+</div>
+<script>
+let briefs=[];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hl=(s,q)=>{s=esc(s);if(!q)return s;return s.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>')};
+
+function render(q=''){
+  q=q.trim();
+  const ql=q.toLowerCase();
+  const rows=briefs.filter(b=>!q||[b.title,b.summary,...(b.items||[]),...(b.tags||[])].join(' ').toLowerCase().includes(ql));
+  document.getElementById('list').innerHTML=rows.map(b=>{
+    const hit=q?(b.items||[]).find(i=>i.toLowerCase().includes(ql)):null;
+    return `<a class="card" href="${esc(b.url)}">
+      <div class="date">${esc(b.date)}</div>
+      <h2>${hl(b.title,q)}</h2>
+      <p>${hl(hit||b.summary,q)}</p>
+      ${b.tags?`<div class="tags">${b.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+    </a>`}).join('');
+  document.getElementById('empty').style.display=rows.length?'none':'block';
+}
+
+fetch('data/briefs.json').then(r=>r.json()).then(d=>{
+  briefs=(d.briefs||[]).sort((a,b)=>b.date.localeCompare(a.date));
+  const dates=briefs.map(b=>b.date).sort();
+  document.getElementById('sDays').textContent=briefs.length;
+  document.getElementById('sItems').textContent=briefs.reduce((n,b)=>n+(b.items||[]).length,0);
+  if(dates.length){
+    const f=s=>s.slice(5).replace('-','.');
+    document.getElementById('sRange').textContent=f(dates[0])+'–'+f(dates[dates.length-1]);
+    document.getElementById('sub').textContent='매일 브리프 모음 · 키워드 검색 · '+dates[dates.length-1]+' 기준';
+  }
+  document.getElementById('links').innerHTML=(d.links||[]).map(l=>`<a href="${esc(l.url)}">${esc(l.title)}</a>`).join('');
+  render();
+});
+document.getElementById('q').addEventListener('input',e=>render(e.target.value));
+</script>
+</body>
+</html>
