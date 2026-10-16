@@ -3,8 +3,18 @@
   "briefs": [
     {
       "date": "2026-10-16",
-      "title": "코스피 하루 7.57% 폭락, 서킷브레이커 발동",
-      "summary": "오늘의 흐름은 'AI 투자 기대의 양면성'이다. 코스피는 외국인 매도로 7.57% 급락하고 Dell 투자의견 하향으로 메모리 비용 부담이 부각된 반면, TSMC는 AI 수요가 \"매우 견조\"하다고 밝혔다. Ericsson은 RAN 시장 보합을 전망했고 삼성은 AI-RAN·6G로 통신사 협력을 다졌다. 화웨이는 아세안 데이터센터 관련 보도 1건에 그쳤다.",
+      "title": {
+        "zh": "KOSPI单日暴跌7.57%，触发熔断",
+        "ko": "코스피 하루 7.57% 폭락, 서킷브레이커 발동",
+        "ja": "KOSPI、1日で7.57%急落しサーキットブレーカー発動",
+        "en": "KOSPI plunges 7.57% in one day, triggering circuit breakers"
+      },
+      "summary": {
+        "zh": "今日主线是“AI投资预期的两面性”：KOSPI在外资抛售下暴跌7.57%，Dell评级下调凸显内存成本压力，而TSMC称AI需求“极为强劲”；Ericsson预计RAN市场持平，三星则围绕AI-RAN与6G巩固运营商合作。华为方面本期仅有东盟数据中心相关的一条报道。",
+        "ko": "오늘의 흐름은 'AI 투자 기대의 양면성'이다. 코스피는 외국인 매도로 7.57% 급락하고 Dell 투자의견 하향으로 메모리 비용 부담이 부각된 반면, TSMC는 AI 수요가 \"매우 견조\"하다고 밝혔다. Ericsson은 RAN 시장 보합을 전망했고 삼성은 AI-RAN·6G로 통신사 협력을 다졌다. 화웨이는 아세안 데이터센터 관련 보도 1건에 그쳤다.",
+        "ja": "本日の流れは「AI投資期待の二面性」である。KOSPIは外国人売りで7.57%急落し、Dellの投資判断引き下げでメモリコスト負担が浮上した一方、TSMCはAI需要を「極めて堅調」とした。EricssonはRAN市場の横ばいを見込み、サムスンはAI-RANと6Gでキャリア協業を固めた。ファーウェイはASEANデータセンター関連の報道1件にとどまった。",
+        "en": "Today's theme is the double edge of AI investment expectations. The KOSPI plunged 7.57% on foreign selling and a Dell downgrade highlighted memory-cost pressure, while TSMC called AI demand \"very strong.\" Ericsson expects a flat RAN market, and Samsung deepened operator ties around AI-RAN and 6G. Huawei coverage was limited to a single report on ASEAN data centers."
+      },
       "tags": [
         "HUAWEI 1",
         "运营商 2",
@@ -16,28 +26,52 @@
       "items": [
         "华为加速向东盟数据中心供货，鲲鹏芯片出口增长[云·数据中心][据报道]",
         "화웨이, 아세안 데이터센터 하드웨어 공급 가속…쿤펑 칩 수출 증가",
+        "ファーウェイ、ASEANのデータセンター向けハード供給を加速…Kunpengチップ輸出が増加",
         "KT举办“2026 AID-X Day”：客户数据分析由8小时缩至10分钟",
         "KT, '2026 AID-X 데이' 개최…고객 데이터 분석 8시간→10분 단축",
+        "KT、「2026 AID-X Day」を開催…顧客データ分析が8時間から10分に短縮",
         "KT与韩国产业安全保健公团签署产业现场安全文化业务协议",
         "KT, 한국산업안전보건공단과 산업현장 안전문화 확산 업무협약",
+        "KT、韓国産業安全保健公団と産業現場の安全文化拡大で業務協約",
         "爱立信3季度销售额595亿瑞典克朗、有机增长7%，预计明年RAN市场持平",
         "Ericsson, 3분기 매출 595억 SEK·유기 성장 7%…내년 RAN 시장은 보합 전망",
+        "Ericsson、3Q売上は595億SEK・オーガニック成長7%…来年のRAN市場は横ばいの見通し",
         "三星电子在硅谷举办未来无线峰会：展示AI-RAN、X-MIMO、ISAC验证成果",
         "삼성전자, 실리콘밸리 퓨처 와이어리스 서밋 개최…AI RAN·X-MIMO·ISAC 검증 결과 공개",
+        "サムスン電子、シリコンバレーでFuture Wireless Summit開催…AI RAN・X-MIMO・ISACの検証結果を披露",
         "Barclays下调Dell评级：企业业务收入“更多取决于内存成本”，HPE、NetApp同遭波及[据报道]",
         "Barclays, Dell 투자의견 하향…\"기업 매출은 AI 전환보다 메모리 비용 영향\"",
+        "Barclays、Dellの投資判断を引き下げ…「企業向け売上はAI移行よりメモリコストの影響」",
         "Kakao公开“全民AI”服务构想：34家机构参与，年底正式上线，目标月活500万",
         "카카오, '모두의 AI' 서비스 구상 공개…34개 기관 참여, 연말 출시·MAU 500만 목표",
+        "Kakao、「みんなのAI」サービス構想を公開…34機関が参加、年内ローンチ・MAU500万人目標",
         "Reuters：Anthropic 11月IPO估值讨论降至1.5万亿美元；FTC向OpenAI、Anthropic发出调查要求[据报道]",
         "Reuters: Anthropic 11월 IPO 기업가치 논의 1.5조 달러로 하향…FTC, OpenAI·Anthropic에 조사 요구서",
+        "Reuters：Anthropicの11月IPO評価額の議論は1.5兆ドルに低下…FTCがOpenAI・Anthropicに調査要求",
         "英伟达发布开放权重模型Nemotron 3.5 Super VL：120B参数、100万token上下文",
         "엔비디아, 오픈 웨이트 'Nemotron 3.5 Super VL' 공개…120B 파라미터·100만 토큰 컨텍스트",
+        "NVIDIA、オープンウェイトの「Nemotron 3.5 Super VL」を公開…120Bパラメータ・100万トークン文脈",
         "KOSPI暴跌7.57%收于5,554点，触发熔断：外资单日净卖3.6万亿韩元",
         "코스피 7.57% 폭락한 5,554 마감…양 시장 서킷브레이커, 외국인 3조6천억 순매도",
+        "KOSPI、7.57%急落の5,554で終了…両市場でサーキットブレーカー、外国人は3.6兆ウォン売り越し",
         "CXMT宣布年内推出4F²服务器DRAM：三星、SK海力士股价承压",
         "CXMT, 연내 4F² 서버 D램 출시 선언…삼성·SK하이닉스 주가 압박",
+        "CXMT、年内に4F²サーバーDRAMを投入すると表明…サムスン・SKハイニックス株が圧迫",
         "TSMC 3季度营收467.2亿美元（+41.2%），称AI需求“极为强劲”，全年增速上调至约44%",
-        "TSMC 3분기 매출 467.2억 달러(+41.2%)…\"AI 수요 매우 견조\", 연간 성장률 약 44%로 상향"
+        "TSMC 3분기 매출 467.2억 달러(+41.2%)…\"AI 수요 매우 견조\", 연간 성장률 약 44%로 상향",
+        "TSMC、3Q売上467.2億ドル（+41.2%）…「AI需要は極めて堅調」、通期成長率は約44%に上方修正",
+        "Huawei accelerates hardware supply to ASEAN data centers; Kunpeng chip exports rise",
+        "KT holds \"2026 AID-X Day\": customer data analysis cut from 8 hours to 10 minutes",
+        "KT signs MOU with KOSHA to spread safety culture at industrial sites",
+        "Ericsson Q3 sales SEK 59.5B, 7% organic growth; RAN market expected flat next year",
+        "Samsung hosts Silicon Valley Future Wireless Summit, shares AI RAN, X-MIMO and ISAC validation results",
+        "Barclays downgrades Dell: enterprise revenue driven more by memory costs than AI transition",
+        "Kakao unveils \"AI for Everyone\": 34 organizations, year-end launch, 5M MAU target",
+        "Reuters: Anthropic November share sale valuation discussed at US$1.5T; FTC sends demands to OpenAI and Anthropic",
+        "NVIDIA releases open-weight Nemotron 3.5 Super VL: 120B parameters, 1M-token context",
+        "KOSPI closes at 5,554 after 7.57% plunge; circuit breakers in both markets, foreigners net sell KRW 3.6T",
+        "CXMT pledges 4F² server DRAM this year, pressuring Samsung and SK hynix shares",
+        "TSMC Q3 revenue US$46.72B (+41.2%): AI demand \"very strong\", full-year growth raised to about 44%"
       ]
     }
   ]
